@@ -2,53 +2,75 @@ import java.awt.*;
 import java.awt.geom.AffineTransform; // 添加此匯入
 
 public class Mineral {
-    private int x, y, width, height, value, weight;
-    private Image image;
-    private boolean collected = false;
-    private double rotationAngle = 0; // 旋轉角度
-    private double rotationSpeed = 0.05; // 旋轉速度
+    private double x, y;
+    private MineralType type;
+    private int value;
+    private int weight;
+    private int width;
+    private int height;
+    private boolean isCollected = false;
+    private double rotation = 0;
+    private int rotationSpeed;
 
-    public Mineral(int x, int y, int width, int height, int value, int weight, String imageName) {
+    public Mineral(MineralType type, int x, int y, int value, int weight, int width, int height, int rotationSpeed) {
+        this.type = type;
         this.x = x;
         this.y = y;
-        this.width = width;
-        this.height = height;
         this.value = value;
         this.weight = weight;
-        this.image = ImageLoader.loadImage(imageName);
-        if (image.getWidth(null) <= 0) {
-            System.err.println("Failed to load image: " + imageName);
-        }
+        this.width = width;
+        this.height = height;
+        this.rotationSpeed = rotationSpeed;
     }
 
     public void updateRotation() {
-        rotationAngle += rotationSpeed; // 每幀更新旋轉角度
-    }
-
-    public void draw(Graphics g) {
-        if (!collected) {
-            Graphics2D g2d = (Graphics2D) g;
-            AffineTransform oldTransform = g2d.getTransform();
-            g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-            g2d.translate(x + width / 2, y + height / 2);
-            g2d.rotate(rotationAngle);
-            g2d.drawImage(image, -width / 2, -height / 2, width, height, null);
-            g2d.setTransform(oldTransform);
+        if (!isCollected) {
+            rotation += rotationSpeed;
+            if (rotation >= 360) rotation -= 360;
         }
     }
 
-    public void drawAt(Graphics g, int hookX, int hookY) {
-        Graphics2D g2d = (Graphics2D) g;
-        AffineTransform oldTransform = g2d.getTransform();
-        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g2d.translate(hookX, hookY + height / 2);
-        g2d.rotate(rotationAngle);
-        g2d.drawImage(image, -width / 2, -height / 2, width, height, null);
-        g2d.setTransform(oldTransform);
+    public void draw(Graphics g) {
+        if (isCollected) return;
+        Image image = type.getImage();
+        if (image != null && image.getWidth(null) > 0) {
+            Graphics2D g2d = (Graphics2D) g;
+            AffineTransform oldTransform = g2d.getTransform();
+            g2d.translate(x, y);
+            g2d.rotate(Math.toRadians(rotation));
+            g2d.drawImage(image, -width / 2, -height / 2, width, height, null);
+            g2d.setTransform(oldTransform);
+        } else {
+            g.setColor(Color.YELLOW);
+            g.fillOval((int)x - width / 2, (int)y - height / 2, width, height);
+        }
+    }
+
+    public void drawAt(Graphics g, int x, int y) {
+        Image image = type.getImage();
+        if (image != null && image.getWidth(null) > 0) {
+            Graphics2D g2d = (Graphics2D) g;
+            AffineTransform oldTransform = g2d.getTransform();
+            g2d.translate(x, y);
+            g2d.rotate(Math.toRadians(rotation));
+            g2d.drawImage(image, -width / 2, -height / 2, width, height, null);
+            g2d.setTransform(oldTransform);
+        } else {
+            g.setColor(Color.YELLOW);
+            g.fillOval(x - width / 2, y - height / 2, width, height);
+        }
     }
 
     public Rectangle getBounds() {
-        return new Rectangle(x, y, width, height);
+        return new Rectangle((int)x - width / 2, (int)y - height / 2, width, height);
+    }
+
+    public boolean isCollected() {
+        return isCollected;
+    }
+
+    public void setCollected(boolean collected) {
+        this.isCollected = collected;
     }
 
     public int getValue() {
@@ -57,13 +79,5 @@ public class Mineral {
 
     public int getWeight() {
         return weight;
-    }
-
-    public boolean isCollected() {
-        return collected;
-    }
-
-    public void setCollected(boolean b) {
-        collected = b;
     }
 }

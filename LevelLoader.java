@@ -1,23 +1,52 @@
-import java.util.*;
+import java.awt.*;
+import java.util.ArrayList;
 
 public class LevelLoader {
-    public static final int MAX_LEVEL = 2; // 最大關卡數
-
     public static LevelConfig loadLevel(int level) {
-        ArrayList<Mineral> list = new ArrayList<>();
+        ArrayList<Mineral> minerals = new ArrayList<>();
+        ArrayList<Mouse> mice = new ArrayList<>();
+        int targetScore = 0;
+        int timeLimit = 0;
+        int bombCount = 0;
+
         if (level == 1) {
-            list.add(new Mineral(300, 400, 40, 40, 500, 5, "gold.png"));
-            list.add(new Mineral(500, 420, 50, 50, 300, 10, "rock.png"));
-            return new LevelConfig(list, 600, 60, 3);
+            minerals.add(new Mineral(
+                MineralType.GOLD, // type
+                100, // x
+                300, // y
+                150, // value
+                4,   // weight
+                45,  // width
+                45,  // height
+                2    // rotationSpeed
+            ));
+            minerals.add(new Mineral(
+                MineralType.ROCK,
+                300,
+                400,
+                50,  // value
+                900,   // weight
+                55,  // width
+                55,  // height
+                1
+            ));
+            mice.add(new NormalMouse(
+                60,
+                new Point(100, 300), new Point(200, 300), new Point(200, 300),
+                50,
+                2
+            ));
+            mice.add(new DiamondMouse(
+                60,
+                new Point(300, 350), new Point(400, 350), new Point(500, 350),
+                200,
+                5
+            ));
+            targetScore = 400; // 調整以反映新分數
+            timeLimit = 60;
+            bombCount = 3;
         }
-        if (level == 2) {
-            list.add(new Mineral(200, 350, 60, 60, 800, 6, "gold.png"));
-            list.add(new Mineral(400, 370, 50, 50, 400, 12, "rock.png"));
-            list.add(new Mineral(600, 390, 40, 40, 300, 5, "gold.png"));
-            return new LevelConfig(list, 1200, 60, 2);
-        }
-        // 預離關卡
-        System.err.println("Invalid level: " + level + ", loading default level");
-        return new LevelConfig(list, 500, 60, 3);
+
+        return new LevelConfig(minerals, mice, targetScore, timeLimit, bombCount);
     }
 }

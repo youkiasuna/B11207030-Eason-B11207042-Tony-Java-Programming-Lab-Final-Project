@@ -7,6 +7,7 @@ public class GamePanel extends JPanel implements ActionListener {
     private javax.swing.Timer timer;
     private Hook hook;
     private ArrayList<Mineral> minerals;
+    private ArrayList<Mouse> mice;
     private ScoreManager scoreManager;
     private TimerManager timerManager;
     private Image backgroundGround;
@@ -33,6 +34,7 @@ public class GamePanel extends JPanel implements ActionListener {
 
         LevelConfig config = LevelLoader.loadLevel(level);
         this.minerals = config.minerals;
+        this.mice = config.mice;
         this.scoreManager = new ScoreManager(config.targetScore);
         this.timerManager = new TimerManager(config.timeLimit);
         this.hook = new Hook(scoreManager);
@@ -42,44 +44,36 @@ public class GamePanel extends JPanel implements ActionListener {
         backgroundUnderground = ImageLoader.loadImage("background_underground.jpg");
         minerImage = ImageLoader.loadImage("miner.png");
 
-        if (backgroundGround == null || backgroundGround.getWidth(null) <= 0) {
-            System.err.println("Failed to load background_ground.jpg");
-        }
-        if (backgroundUnderground == null || backgroundUnderground.getWidth(null) <= 0) {
-            System.err.println("Failed to load background_underground.jpg");
-        }
-        if (minerImage == null || minerImage.getWidth(null) <= 0) {
-            System.err.println("Failed to load miner.png");
-        }
-
         timer = new javax.swing.Timer(20, this);
         timer.start();
-        System.out.println("GamePanel initialized, timer started");
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         timerManager.update();
-        hook.update(minerals);
-        if (hook.isReturning() && hook.getCaughtMineral() != null) {
-            hook.getCaughtMineral().updateRotation();
+        hook.update(minerals, mice);
+        if (hook.isReturning() && hook.getCaughtItem() != null) {
+            // 不再需要 updateRotation（老鼠無旋轉）
         }
         for (Mineral m : minerals) {
             if (!m.isCollected()) {
                 m.updateRotation();
             }
         }
+        for (Mouse m : mice) {
+            if (!m.isCollected()) {
+                m.update();
+            }
+        }
 
-        // 檢查所有礦物是否收集，且鉤子返回，且分數達標
-        boolean allCollected = minerals.stream().allMatch(Mineral::isCollected);
+        boolean allCollected = minerals.stream().allMatch(Mineral::isCollected) &&
+                              mice.stream().allMatch(Mouse::isCollected);
         if (allCollected && !hook.isReturning() && scoreManager.hasMetGoal()) {
             timer.stop();
             JOptionPane.showMessageDialog(this, "You win!");
-            System.out.println("All minerals collected, hook returned, score met, game ended. Score: " + scoreManager.getScore() + ", Target: " + scoreManager.getTargetScore());
+            System.out.println("All items collected, hook returned, score met, game ended. Score: " + scoreManager.getScore() + ", Target: " + scoreManager.getTargetScore());
             manager.returnToMenu();
-        }
-        // 時間結束檢查
-        else if (timerManager.isTimeUp()) {
+        } else if (timerManager.isTimeUp()) {
             timer.stop();
             JOptionPane.showMessageDialog(this, scoreManager.hasMetGoal() ? "You win!" : "You lose!");
             System.out.println("Time up, game ended. Score: " + scoreManager.getScore() + ", Target: " + scoreManager.getTargetScore());
@@ -102,9 +96,9 @@ public class GamePanel extends JPanel implements ActionListener {
         } else {
             g.setColor(Color.BLUE);
             g.fillRect(400 - 40, 120 - 80, 80, 80);
-            System.err.println("Drawing fallback rectangle for miner due to missing image");
         }
         for (Mineral m : minerals) m.draw(g);
+        for (Mouse m : mice) m.draw(g);
         hook.draw(g);
         g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.BOLD, 20));
@@ -118,16 +112,12 @@ public class GamePanel extends JPanel implements ActionListener {
         public void keyPressed(KeyEvent e) {
             System.out.println("Key pressed: " + e.getKeyCode() + " (" + KeyEvent.getKeyText(e.getKeyCode()) + ")");
             if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-                System.out.println("Space key pressed, calling hook.launch()");
                 hook.launch();
             }
             if (e.getKeyCode() == KeyEvent.VK_C && bombsLeft > 0) {
-                System.out.println("C key pressed, attempting to use bomb");
                 if (hook.useBomb()) {
                     bombsLeft--;
                     System.out.println("Bomb used, bombs left: " + bombsLeft);
-                } else {
-                    System.out.println("Bomb use failed");
                 }
             }
             requestFocusInWindow();
