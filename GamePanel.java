@@ -21,6 +21,13 @@ public class GamePanel extends JPanel implements ActionListener {
         this.level = level;
         setFocusable(true);
         addKeyListener(new GameKeyAdapter());
+        addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                System.out.println("GamePanel lost focus");
+                requestFocusInWindow();
+            }
+        });
         setLayout(null);
         requestFocusInWindow();
 
@@ -35,13 +42,13 @@ public class GamePanel extends JPanel implements ActionListener {
         backgroundUnderground = ImageLoader.loadImage("background_underground.jpg");
         minerImage = ImageLoader.loadImage("miner.png");
 
-        if (backgroundGround.getWidth(null) <= 0) {
+        if (backgroundGround == null || backgroundGround.getWidth(null) <= 0) {
             System.err.println("Failed to load background_ground.jpg");
         }
-        if (backgroundUnderground.getWidth(null) <= 0) {
+        if (backgroundUnderground == null || backgroundUnderground.getWidth(null) <= 0) {
             System.err.println("Failed to load background_underground.jpg");
         }
-        if (minerImage.getWidth(null) <= 0) {
+        if (minerImage == null || minerImage.getWidth(null) <= 0) {
             System.err.println("Failed to load miner.png");
         }
 
@@ -53,7 +60,7 @@ public class GamePanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         timerManager.update();
-        hook.update();
+        hook.update(minerals);
         if (hook.isReturning() && hook.getCaughtMineral() != null) {
             hook.getCaughtMineral().updateRotation();
         }
@@ -62,11 +69,20 @@ public class GamePanel extends JPanel implements ActionListener {
                 m.updateRotation();
             }
         }
-        if (hook.isReturning()) hook.checkCollision(minerals, scoreManager);
 
-        if (timerManager.isTimeUp()) {
+        // 檢查所有礦物是否收集，且鉤子返回，且分數達標
+        boolean allCollected = minerals.stream().allMatch(Mineral::isCollected);
+        if (allCollected && !hook.isReturning() && scoreManager.hasMetGoal()) {
+            timer.stop();
+            JOptionPane.showMessageDialog(this, "You win!");
+            System.out.println("All minerals collected, hook returned, score met, game ended. Score: " + scoreManager.getScore() + ", Target: " + scoreManager.getTargetScore());
+            manager.returnToMenu();
+        }
+        // 時間結束檢查
+        else if (timerManager.isTimeUp()) {
             timer.stop();
             JOptionPane.showMessageDialog(this, scoreManager.hasMetGoal() ? "You win!" : "You lose!");
+            System.out.println("Time up, game ended. Score: " + scoreManager.getScore() + ", Target: " + scoreManager.getTargetScore());
             manager.returnToMenu();
         }
         repaint();
@@ -75,9 +91,19 @@ public class GamePanel extends JPanel implements ActionListener {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(backgroundGround, 0, 0, getWidth(), getHeight() / 5, this);
-        g.drawImage(backgroundUnderground, 0, getHeight() / 5, getWidth(), getHeight() * 4 / 5, this);
-        g.drawImage(minerImage, getWidth() / 2 - 40, getHeight() / 5 - 80, 80, 80, this);
+        if (backgroundGround != null) {
+            g.drawImage(backgroundGround, 0, 0, getWidth(), getHeight() / 5, this);
+        }
+        if (backgroundUnderground != null) {
+            g.drawImage(backgroundUnderground, 0, getHeight() / 5, getWidth(), getHeight() * 4 / 5, this);
+        }
+        if (minerImage != null) {
+            g.drawImage(minerImage, 400 - 40, 120 - 80, 80, 80, this);
+        } else {
+            g.setColor(Color.BLUE);
+            g.fillRect(400 - 40, 120 - 80, 80, 80);
+            System.err.println("Drawing fallback rectangle for miner due to missing image");
+        }
         for (Mineral m : minerals) m.draw(g);
         hook.draw(g);
         g.setColor(Color.BLACK);

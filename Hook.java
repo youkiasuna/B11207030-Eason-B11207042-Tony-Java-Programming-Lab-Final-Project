@@ -21,23 +21,29 @@ public class Hook {
         this.scoreManager = scoreManager;
         this.x = 400;
         this.y = 120;
-        if (hookImage.getWidth(null) <= 0) {
-            System.err.println("Failed to load hook.png");
+        if (hookImage == null || hookImage.getWidth(null) <= 0) {
+            System.err.println("Failed to load hook.png or image is invalid");
+        } else {
+            System.out.println("hook.png loaded successfully, width: " + hookImage.getWidth(null));
         }
     }
 
-    public void update() {
+    public void update(List<Mineral> minerals) {
         if (!isExtending && !isReturning) {
             time += swingSpeed;
             angle = Math.PI / 2 + Math.sin(time) * Math.PI / 2; // 90 度 ± 90 度
         } else if (isExtending) {
             length += 10;
-            // 檢查是否碰到視窗邊緣
-            int endX = (int) (x + length * Math.cos(angle));
-            int endY = (int) (y + length * Math.sin(angle));
-            if (endX <= 0 || endX >= WINDOW_WIDTH || endY >= WINDOW_HEIGHT) {
-                startReturn();
-                System.out.println("Hook hit window edge: endX=" + endX + ", endY=" + endY);
+            // 檢查礦物碰撞
+            checkCollision(minerals, scoreManager);
+            // 若未抓到礦物，檢查視窗邊緣
+            if (caughtMineral == null) {
+                int endX = (int) (x + length * Math.cos(angle));
+                int endY = (int) (y + length * Math.sin(angle));
+                if (endX <= 0 || endX >= WINDOW_WIDTH || endY >= WINDOW_HEIGHT) {
+                    startReturn();
+                    System.out.println("Hook hit window edge: endX=" + endX + ", endY=" + endY);
+                }
             }
         } else if (isReturning) {
             int speed = (caughtMineral != null) ? Math.max(5, 20 - caughtMineral.getWeight()) : 20;
@@ -108,15 +114,23 @@ public class Hook {
         g2d.drawLine(x, y, endX, endY);
         g2d.setStroke(new BasicStroke(1));
         
-        // 保存畫布狀態
-        AffineTransform oldTransform = g2d.getTransform();
-        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g2d.translate(endX, endY);
-        g2d.rotate(angle); // 假設 hook.png 朝上
-        int hookWidth = 20;
-        int hookHeight = 20;
-        g2d.drawImage(hookImage, -hookWidth / 2, -hookHeight / 2, hookWidth, hookHeight, null);
-        g2d.setTransform(oldTransform);
+        // 繪製鉤子圖片
+        System.out.println("Drawing hook at endX=" + endX + ", endY=" + endY);
+        if (hookImage != null && hookImage.getWidth(null) > 0) {
+            AffineTransform oldTransform = g2d.getTransform();
+            g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            g2d.translate(endX, endY);
+            g2d.rotate(angle); // 假設 hook.png 朝上，否則改為 angle + Math.PI
+            int hookWidth = 20;
+            int hookHeight = 20;
+            g2d.drawImage(hookImage, -hookWidth / 2, -hookHeight / 2, hookWidth, hookHeight, null);
+            g2d.setTransform(oldTransform);
+        } else {
+            // 備用圖形（紅色矩形）
+            g2d.setColor(Color.RED);
+            g2d.fillRect(endX - 10, endY - 10, 20, 20);
+            System.err.println("Drawing fallback rectangle for hook due to missing image");
+        }
         
         if (caughtMineral != null) caughtMineral.drawAt(g, endX, endY);
     }
