@@ -11,38 +11,30 @@ public class LevelLoader {
 
         if (level == 1) {
             minerals.add(new Mineral(
-                MineralType.GOLD, // type
-                100, // x
-                300, // y
-                150, // value
-                4,   // weight
-                45,  // width
-                45,  // height
-                2    // rotationSpeed
+                MineralType.GOLD, 100, 300, 150, 4, 45, 45, 2
             ));
             minerals.add(new Mineral(
-                MineralType.ROCK,
-                300,
-                400,
-                50,  // value
-                900,   // weight
-                55,  // width
-                55,  // height
-                1
+                MineralType.ROCK, 300, 400, 50, 7, 55, 55, 1
             ));
             mice.add(new NormalMouse(
-                60,
-                new Point(100, 300), new Point(200, 300), new Point(200, 300),
-                50,
-                2
+                60, // size
+                new Point(100, 300), // point1
+                new Point(200, 300), // point2, Y 固定
+                new Point(300, 300), // point3, Y 固定
+                50, // value
+                2,  // weight
+                0.01 // moveSpeed (2 秒/段)
             ));
             mice.add(new DiamondMouse(
-                60,
-                new Point(300, 350), new Point(400, 350), new Point(500, 350),
+                50,
+                new Point(300, 350), // point1
+                new Point(400, 350), // point2, Y 固定
+                new Point(500, 350), // point3, Y 固定
                 200,
-                5
+                5,
+                0.02 // moveSpeed (1 秒/段)
             ));
-            targetScore = 400; // 調整以反映新分數
+            targetScore = 400;
             timeLimit = 60;
             bombCount = 3;
         }
