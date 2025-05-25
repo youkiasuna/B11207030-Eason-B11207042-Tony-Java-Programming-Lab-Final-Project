@@ -66,44 +66,81 @@ public class GamePanel extends JPanel implements ActionListener {
                 mineral.update();
             }
         }
-
-        repaint();
         
         boolean allCollected = minerals.stream().allMatch(m -> m.isCollected() || m.isDestroyed()) &&
                             mice.stream().allMatch(m -> m.isCollected() || m.isDestroyed());
         if (allCollected && !hook.isReturning() && hook.getCaughtItem() == null) {
             gameEnded = true;
-            System.out.println("Game ended. Score: " + scoreManager.getScore() + ", Target: " + scoreManager.getTargetScore());
+            repaint();
             if (scoreManager.hasMetGoal()) {
-                JOptionPane.showMessageDialog(this, "恭喜過關！", "遊戲結束", JOptionPane.INFORMATION_MESSAGE);
-                System.out.println("Win condition met, returning to menu");
+                if (level >= LevelLoader.MAX_LEVEL) {
+                    JOptionPane.showMessageDialog(
+                        this,
+                        "🎉 恭喜你完成所有關卡！",
+                        "通關成功",
+                        JOptionPane.INFORMATION_MESSAGE
+                    );
+                    gameManager.returnToMenu();
+                } else {
+                    int option = JOptionPane.showOptionDialog(
+                        this,
+                        "你成功達到目標分數！要繼續挑戰下一關嗎？",
+                        "通關成功",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.INFORMATION_MESSAGE,
+                        null,
+                        new String[]{"下一關", "返回主選單"},
+                        "下一關"
+                    );
+                    if (option == JOptionPane.YES_OPTION) {
+                        gameManager.startNextLevel(level);
+                    } else {
+                        gameManager.returnToMenu();
+                    }
+                }
             } else {
-                JOptionPane.showMessageDialog(this, "分數未達標，挑戰失敗", "遊戲結束", JOptionPane.INFORMATION_MESSAGE);
-                System.out.println("Score not met, returning to menu");
+                JOptionPane.showMessageDialog(
+                    this,
+                    "你已挖完場上的資源，但未達到目標分數，請再接再厲！",
+                    "挑戰失敗",
+                    JOptionPane.WARNING_MESSAGE
+                );
+                gameManager.returnToMenu();
             }
-            gameManager.returnToMenu();
-        } else if (allCollected) {
+        }
+         /*else if (allCollected) {
             // 添加日誌，追蹤為何不結束
             System.out.println("All items collected/destroyed, but game not ended. isReturning: " + hook.isReturning() + ", caughtItem: " + (hook.getCaughtItem() != null));
-        }
+        }*/
         
         if (timerManager.isTimeUp() && !gameEnded) {
             gameEnded = true;
-            if (scoreManager.hasMetGoal()) {
-                JOptionPane.showMessageDialog(this, "時間到！恭喜達標", "遊戲結束", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(this, "時間到！未達標", "遊戲結束", JOptionPane.INFORMATION_MESSAGE);
-            }
-            System.out.println("Time up. Score: " + scoreManager.getScore() + ", Target: " + scoreManager.getTargetScore());
+            repaint();
+            
+            JOptionPane.showMessageDialog(this, "時間到！未達到目標分數，請再接再厲！");
             gameManager.returnToMenu();
         }
 
         if (scoreManager.hasMetGoal() && !gameEnded) {
             gameEnded = true;
-            JOptionPane.showMessageDialog(this, "恭喜達成目標分數！", "遊戲結束", JOptionPane.INFORMATION_MESSAGE);
-            gameManager.returnToMenu();
+            repaint();
+
+            int option = JOptionPane.showOptionDialog(
+                this,
+                "你成功達到目標分數！要繼續挑戰下一關嗎？",
+                "通關成功",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.INFORMATION_MESSAGE,
+                null,
+                new String[]{"下一關", "返回主選單"},
+                "下一關"
+            );
+            if (option == JOptionPane.YES_OPTION) {
+                gameManager.startNextLevel(level);
+            } else {
+                gameManager.returnToMenu();
+            }
         }
-        
         repaint();
     }
 
@@ -130,7 +167,9 @@ public class GamePanel extends JPanel implements ActionListener {
         g.drawString("Score: " + scoreManager.getScore(), 20, 30);
         g.drawString("Time: " + timerManager.getTimeLeft(), 150, 30);
         g.drawString("Bombs: " + bombsLeft, 280, 30);
-        g.drawString("Target: " + scoreManager.getTargetScore(), 650, 30);
+        g.setColor(Color.BLUE);
+        g.drawString("Level: " + level, 650, 30);
+        g.drawString("Target: " + scoreManager.getTargetScore(), 650, 60);
     }
 
     private class GameKeyAdapter extends KeyAdapter {

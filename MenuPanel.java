@@ -5,7 +5,7 @@ import java.awt.event.*;
 public class MenuPanel extends JPanel implements KeyListener {
     private GameManager manager;
     private int selectedLevel = 1;
-    private static final int MAX_LEVEL = 2; // 假設最大關卡為 2
+    private static final int MAX_LEVEL = 9; // 假設最大關卡為 2
 
     public MenuPanel(GameManager manager) {
         this.manager = manager;
