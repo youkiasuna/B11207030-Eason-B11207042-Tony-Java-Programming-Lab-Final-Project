@@ -17,6 +17,9 @@ public class GamePanel extends JPanel implements ActionListener {
     private int bombsLeft;
     private boolean gameEnded = false;
     private GameManager gameManager;
+    private SoundPlayer bgmPlayer = new SoundPlayer();
+    private SoundPlayer sfxPlayer = new SoundPlayer();
+
 
     public GamePanel(GameManager manager, int level) {
         setFocusable(true);
@@ -38,8 +41,11 @@ public class GamePanel extends JPanel implements ActionListener {
         this.mice = config.mice;
         this.scoreManager = new ScoreManager(config.targetScore);
         this.timerManager = new TimerManager(config.timeLimit);
-        this.hook = new Hook(scoreManager);
+        this.hook = new Hook(scoreManager, sfxPlayer);
         this.bombsLeft = config.bombCount;  // 直接初始化 bombCount
+        bgmPlayer.playSound("sounds/bgm.wav", true);
+        //bgmPlayer.setValue(-10.0f);
+
 
         backgroundGround = ImageLoader.loadImage("background_ground.jpg");
         backgroundUnderground = ImageLoader.loadImage("background_underground.jpg");
@@ -71,6 +77,7 @@ public class GamePanel extends JPanel implements ActionListener {
                             mice.stream().allMatch(m -> m.isCollected() || m.isDestroyed());
         if (allCollected && !hook.isReturning() && hook.getCaughtItem() == null) {
             gameEnded = true;
+            bgmPlayer.stop();
             repaint();
             if (scoreManager.hasMetGoal()) {
                 if (level >= LevelLoader.MAX_LEVEL) {
@@ -115,6 +122,7 @@ public class GamePanel extends JPanel implements ActionListener {
         
         if (timerManager.isTimeUp() && !gameEnded) {
             gameEnded = true;
+            bgmPlayer.stop();
             repaint();
             
             JOptionPane.showMessageDialog(this, "時間到！未達到目標分數，請再接再厲！");
@@ -123,6 +131,7 @@ public class GamePanel extends JPanel implements ActionListener {
 
         if (scoreManager.hasMetGoal() && !gameEnded) {
             gameEnded = true;
+            bgmPlayer.stop();
             repaint();
 
             int option = JOptionPane.showOptionDialog(
@@ -180,6 +189,7 @@ public class GamePanel extends JPanel implements ActionListener {
             } else if (e.getKeyCode() == KeyEvent.VK_C && !gameEnded) {
                 if (bombsLeft> 0 && hook.getCaughtItem() != null) {
                     if (hook.useBomb()) {
+                        sfxPlayer.playSound("sounds/explosion.wav", false);
                         bombsLeft--;
                         System.out.println("Bomb count reduced to: " + bombsLeft);
                     } else {

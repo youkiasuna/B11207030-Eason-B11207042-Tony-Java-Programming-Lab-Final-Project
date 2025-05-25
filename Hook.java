@@ -16,11 +16,13 @@ public class Hook {
     private ScoreManager scoreManager;
     private static final int WINDOW_WIDTH = 800;
     private static final int WINDOW_HEIGHT = 600;
+    private SoundPlayer sfxPlayer;
 
-    public Hook(ScoreManager scoreManager) {
+    public Hook(ScoreManager scoreManager, SoundPlayer sfxPlayer) {
         this.scoreManager = scoreManager;
         this.x = 400;
         this.y = 120;
+        this.sfxPlayer = sfxPlayer;
         if (hookImage == null || hookImage.getWidth(null) <= 0) {
             System.err.println("Failed to load hook.png");
         }
@@ -152,6 +154,7 @@ public class Hook {
     private void reset() {
         isReturning = false;
         if (caughtItem != null) {
+            sfxPlayer.playSound("sounds/score.wav", false);
             scoreManager.addScore(getItemValue());
             System.out.println("Score added: " + getItemValue());
             caughtItem = null;
@@ -161,6 +164,7 @@ public class Hook {
 
     private int getItemValue() {
         if (caughtItem instanceof Mineral) {
+            
             return ((Mineral)caughtItem).getValue();
         } else if (caughtItem instanceof Mouse) {
             return ((Mouse)caughtItem).getValue();
