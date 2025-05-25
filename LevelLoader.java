@@ -14,6 +14,9 @@ public class LevelLoader {
                 MineralType.GOLD, 100, 300, 150, 4, 45, 45, 2
             ));
             minerals.add(new Mineral(
+                MineralType.GOLD, 500, 300, 150, 4, 45, 45, 2
+            ));
+            minerals.add(new Mineral(
                 MineralType.ROCK, 300, 400, 50, 7, 55, 55, 1
             ));
             mice.add(new NormalMouse(

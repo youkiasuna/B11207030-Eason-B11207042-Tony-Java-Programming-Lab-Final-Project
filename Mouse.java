@@ -16,6 +16,7 @@ public abstract class Mouse {
     protected boolean isPausing = false; // 是否停頓
     protected int pauseTimer = 0; // 停頓計數器
     protected static final int PAUSE_DURATION = 50; // 1 秒（50 次更新，20ms/次）
+    protected boolean isDestroyed = false;
 
     public Mouse(int size, Point point1, Point point2, Point point3, int value, int weight, String imageName, double moveSpeed) {
         this.size = size;
@@ -155,5 +156,13 @@ public abstract class Mouse {
 
     public int getWeight() {
         return weight;
+    }
+
+     public boolean isDestroyed() {
+        return isDestroyed;
+    }
+
+    public void setDestroyed(boolean destroyed) {
+        this.isDestroyed = destroyed;
     }
 }

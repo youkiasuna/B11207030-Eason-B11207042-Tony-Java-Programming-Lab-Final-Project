@@ -11,6 +11,8 @@ public class Mineral {
     private boolean isCollected = false;
     private double rotation = 0;
     private int rotationSpeed;
+    private boolean isDestroyed = false;
+    private double rotationAngle = 0;
 
     public Mineral(MineralType type, int x, int y, int value, int weight, int width, int height, int rotationSpeed) {
         this.type = type;
@@ -21,6 +23,11 @@ public class Mineral {
         this.width = width;
         this.height = height;
         this.rotationSpeed = rotationSpeed;
+    }
+
+    public void update() {
+        if (isCollected || isDestroyed) return;
+        rotationAngle = (rotationAngle + rotationSpeed) % 360;
     }
 
     public void updateRotation() {
@@ -79,5 +86,13 @@ public class Mineral {
 
     public int getWeight() {
         return weight;
+    }
+
+    public boolean isDestroyed() {
+        return isDestroyed;
+    }
+
+    public void setDestroyed(boolean destroyed) {
+        this.isDestroyed = destroyed;
     }
 }
