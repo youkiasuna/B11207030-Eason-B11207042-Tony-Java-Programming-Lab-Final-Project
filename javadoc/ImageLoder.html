@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>ImageLoader 說明文件</title>
+  <style>
+    body { font-family: sans-serif; padding: 2em; line-height: 1.6; background: #f9f9f9; color: #333; }
+    code { background: #eee; padding: 0.2em 0.4em; border-radius: 4px; }
+    pre { background: #eee; padding: 1em; border-radius: 4px; overflow: auto; }
+    h1 { color: #444; }
+  </style>
+</head>
+<body>
+  <h1>🖼️ ImageLoader 類別</h1>
+  <p>此工具類負責從專案的 <code>/images/</code> 資料夾中載入圖片，支援 Swing 圖像的標準用法。</p>
+
+  <h2>🔧 方法說明</h2>
+  <h3><code>public static Image loadImage(String fileName)</code></h3>
+  <p>嘗試載入指定檔名的圖片。如果成功，回傳 <code>Image</code> 物件；若失敗，會印出錯誤訊息並回傳 1x1 的透明圖像（預防 null pointer 錯誤）。</p>
+
+  <h2>📌 使用範例</h2>
+  <pre><code>Image img = ImageLoader.loadImage("hook.png");</code></pre>
+
+  <h2>📁 圖片檔案應放置路徑</h2>
+  <p>所有圖片需放在 <code>resources/images/</code> 目錄下，例如：</p>
+  <ul>
+    <li><code>/resources/images/hook.png</code></li>
+    <li><code>/resources/images/miner.png</code></li>
+    <li><code>/resources/images/background_underground.jpg</code></li>
+  </ul>
+
+  <h2>⚠️ 錯誤處理</h2>
+  <p>若載入失敗，將顯示錯誤於標準輸出：</p>
+  <pre><code>Failed to load image: hook.png - Invalid image or not found</code></pre>
+
+  <h2>📋 備註</h2>
+  <ul>
+    <li>此類別依賴 <code>getResource()</code>，因此需確保資源打包於 JAR 時仍可被存取。</li>
+    <li>對無效圖片自動提供預設透明圖像，可防止繪製時噴錯。</li>
+  </ul>
+</body>
+</html>

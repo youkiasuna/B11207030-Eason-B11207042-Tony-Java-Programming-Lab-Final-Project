@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Class MainFrame</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 2em; background: #f9f9f9; }
+        h1 { color: #2c3e50; }
+        code { background: #eee; padding: 2px 4px; border-radius: 3px; }
+        pre { background: #eee; padding: 1em; border-radius: 5px; overflow-x: auto; }
+        .section { margin-bottom: 2em; }
+    </style>
+</head>
+<body>
+    <h1>Class MainFrame</h1>
+
+    <div class="section">
+        <h2>Package</h2>
+        <p><code>(default package)</code></p>
+    </div>
+
+    <div class="section">
+        <h2>Inheritance</h2>
+        <p><code>java.lang.Object</code> → <code>java.awt.Component</code> → <code>java.awt.Container</code> → <code>javax.swing.JComponent</code> → <code>javax.swing.RootPaneContainer</code> → <code>javax.swing.JFrame</code> → <strong>MainFrame</strong></p>
+    </div>
+
+    <div class="section">
+        <h2>Description</h2>
+        <p>Main application window for the Gold Miner game. Sets up the game window, initializes the game manager, and displays the main menu panel.</p>
+    </div>
+
+    <div class="section">
+        <h2>Constructor Summary</h2>
+        <table border="1" cellpadding="5" cellspacing="0">
+            <tr style="background:#ddd;">
+                <th>Constructor</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>MainFrame()</code></td>
+                <td>Creates the main application frame with a title, default size, and menu panel as the content pane.</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Method Summary</h2>
+        <table border="1" cellpadding="5" cellspacing="0">
+            <tr style="background:#ddd;">
+                <th>Modifier and Type</th>
+                <th>Method</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>public static void</code></td>
+                <td><code>main(String[] args)</code></td>
+                <td>Launches the game using <code>SwingUtilities.invokeLater</code>. Also prints the working directory for debugging purposes.</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Fields and UI Configuration</h2>
+        <ul>
+            <li>Title: <code>"Gold Miner Game"</code></li>
+            <li>Window Size: <code>800 x 600</code> pixels</li>
+            <li>Default Close Operation: <code>EXIT_ON_CLOSE</code></li>
+            <li>Centers the window on screen using <code>setLocationRelativeTo(null)</code></li>
+            <li>Initial panel: <code>MenuPanel</code> from <code>GameManager</code></li>
+        </ul>
+    </div>
+
+    <hr>
+</body>
+</html>

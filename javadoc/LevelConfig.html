@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>LevelConfig 類別說明</title>
+  <style>
+    body { font-family: sans-serif; padding: 2em; background: #fdfdfd; color: #333; }
+    code, pre { background: #f4f4f4; padding: 0.4em; border-radius: 4px; }
+    h1, h2, h3 { color: #444; }
+  </style>
+</head>
+<body>
+
+  <h1>🎮 LevelConfig 類別</h1>
+  <p><code>LevelConfig</code> 是遊戲中用來設定每個關卡的參數資料類別，包含礦物、老鼠、分數目標、時間限制與炸彈數量。</p>
+
+  <h2>📦 欄位說明</h2>
+  <ul>
+    <li><code>ArrayList&lt;Mineral&gt; minerals</code>：本關卡中出現的所有礦物清單。</li>
+    <li><code>ArrayList&lt;Mouse&gt; mice</code>：本關卡中出現的所有老鼠清單。</li>
+    <li><code>int targetScore</code>：該關卡的過關目標分數。</li>
+    <li><code>int timeLimit</code>：關卡限制時間（單位：秒）。</li>
+    <li><code>int bombCount</code>：玩家於該關卡可使用的炸彈數量。</li>
+  </ul>
+
+  <h2>🧰 建構子</h2>
+  <pre><code>
+public LevelConfig(ArrayList&lt;Mineral&gt; minerals, ArrayList&lt;Mouse&gt; mice, int targetScore, int timeLimit, int bombCount)
+  </code></pre>
+  <p>用於初始化關卡設定的建構子。</p>
+
+  <h3>參數</h3>
+  <ul>
+    <li><strong>minerals</strong>：礦物物件清單</li>
+    <li><strong>mice</strong>：老鼠物件清單</li>
+    <li><strong>targetScore</strong>：過關分數門檻</li>
+    <li><strong>timeLimit</strong>：倒數計時秒數</li>
+    <li><strong>bombCount</strong>：可用炸彈數量</li>
+  </ul>
+
+  <h2>📘 方法</h2>
+  <h3><code>public int getTimeLimit()</code></h3>
+  <p>取得此關卡的時間限制（秒）。</p>
+
+  <h2>📋 使用範例</h2>
+  <pre><code>
+ArrayList&lt;Mineral&gt; minerals = new ArrayList&lt;&gt;();
+minerals.add(new Mineral(...));
+
+ArrayList&lt;Mouse&gt; mice = new ArrayList&lt;&gt;();
+mice.add(new Mouse(...));
+
+LevelConfig level = new LevelConfig(minerals, mice, 1000, 60, 2);
+
+int time = level.getTimeLimit(); // 60
+  </code></pre>
+
+  <h2>📎 備註</h2>
+  <ul>
+    <li>本類別僅作為資料容器，不含邏輯運算。</li>
+    <li>通常由 <code>GameLevel</code> 或主遊戲控制器使用。</li>
+  </ul>
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>LevelLoader 類別說明</title>
+  <style>
+    body { font-family: sans-serif; padding: 2em; background: #fdfdfd; color: #333; }
+    code, pre { background: #f4f4f4; padding: 0.4em; border-radius: 4px; }
+    h1, h2, h3 { color: #444; }
+  </style>
+</head>
+<body>
+
+  <h1>🗺️ LevelLoader 類別</h1>
+  <p><code>LevelLoader</code> 是用來載入不同遊戲關卡資料的靜態類別。每一關的礦物、老鼠、目標分數、時間與炸彈數都在這裡預先配置。</p>
+
+  <h2>📦 屬性</h2>
+  <ul>
+    <li><code>public static final int MAX_LEVEL = 9</code>：定義遊戲最大關卡數。</li>
+  </ul>
+
+  <h2>🧰 方法</h2>
+  <h3><code>public static LevelConfig loadLevel(int level)</code></h3>
+  <p>根據關卡編號（1-9）回傳對應的 <code>LevelConfig</code> 設定物件。</p>
+
+  <h4>參數</h4>
+  <ul>
+    <li><strong>level</strong>：關卡編號，從 1 到 <code>MAX_LEVEL</code>。</li>
+  </ul>
+
+  <h4>回傳值</h4>
+  <p>對應的 <code>LevelConfig</code> 物件；若編號無效，預設回傳第一關設定。</p>
+
+  <h2>📋 關卡內容範例</h2>
+  <h3>關卡 1（新手教學）</h3>
+  <ul>
+    <li>黃金與岩石共 3 個</li>
+    <li>普通老鼠與鑽石老鼠各 1 隻</li>
+    <li>目標分數：400，時間限制：60 秒，炸彈：3 顆</li>
+  </ul>
+
+  <h3>關卡 5（炸彈教學）</h3>
+  <ul>
+    <li>黃金被高硬度岩石包圍，必須使用炸彈</li>
+    <li>目標分數：1400，時間限制：30 秒，炸彈：4 顆</li>
+  </ul>
+
+  <h3>關卡 9（終極地獄）</h3>
+  <ul>
+    <li>鋪滿超高重量岩石 + 超高速鑽石老鼠</li>
+    <li>時間壓力大，目標分數高達 4200，炸彈數：0</li>
+  </ul>
+
+  <h2>📎 備註</h2>
+  <ul>
+    <li>此類別內建所有關卡內容，因此維護或新增關卡需修改原始碼。</li>
+    <li>通常由 <code>GameController</code> 或 <code>GameScene</code> 呼叫。</li>
+    <li>每一個 <code>Mineral</code> 與 <code>Mouse</code> 都根據其座標、價值、重量與圖片尺寸設定。</li>
+  </ul>
+
+  <h2>📘 使用方式</h2>
+  <pre><code>
+LevelConfig level3 = LevelLoader.loadLevel(3);
+int time = level3.getTimeLimit(); // 40
+int bombs = level3.bombCount;     // 4
+List&lt;Mineral&gt; minerals = level3.minerals;
+  </code></pre>
+
+</body>
+</html>

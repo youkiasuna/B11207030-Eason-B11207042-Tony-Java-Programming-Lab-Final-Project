@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>Mineral 類別說明</title>
+  <style>
+    body { font-family: sans-serif; padding: 2em; background: #fdfdfd; color: #333; }
+    code { background: #eee; padding: 0.2em 0.4em; border-radius: 4px; }
+    pre { background: #f4f4f4; padding: 1em; border-radius: 4px; overflow-x: auto; }
+    h1, h2, h3 { color: #444; }
+  </style>
+</head>
+<body>
+  <h1>💎 Mineral 類別</h1>
+  <p>此類別代表遊戲中的一個「礦物」（例如：金塊、石頭、鑽石等），具有位置、大小、價值、重量與圖像等資訊，並支援旋轉動畫及繪圖。</p>
+
+  <h2>📦 屬性</h2>
+  <ul>
+    <li><code>x, y</code>：礦物的中心位置座標。</li>
+    <li><code>value</code>：礦物的得分價值。</li>
+    <li><code>weight</code>：影響鉤爪拉回速度的權重。</li>
+    <li><code>type</code>：礦物的種類（透過 <code>MineralType</code> 提供圖像）。</li>
+    <li><code>isCollected</code>：是否已被鉤爪抓取。</li>
+    <li><code>isDestroyed</code>：是否已被炸彈破壞。</li>
+    <li><code>rotation</code>：當前旋轉角度。</li>
+    <li><code>rotationSpeed</code>：旋轉速度（每次更新增加角度）。</li>
+  </ul>
+
+  <h2>🔧 方法</h2>
+
+  <h3><code>public void update()</code></h3>
+  <p>更新旋轉角度，若礦物已被收集或破壞則不更新。</p>
+
+  <h3><code>public void updateRotation()</code></h3>
+  <p>與 <code>update()</code> 類似，但是另一組旋轉邏輯（如 hook 上的跟隨轉動）。</p>
+
+  <h3><code>public void draw(Graphics g)</code></h3>
+  <p>在遊戲畫面上繪出礦物，若有對應圖像會旋轉後繪製；否則畫一個黃色圓形。</p>
+
+  <h3><code>public void drawAt(Graphics g, int x, int y)</code></h3>
+  <p>在指定座標繪製礦物（用於被鉤爪抓住時顯示）。</p>
+
+  <h3><code>public Rectangle getBounds()</code></h3>
+  <p>取得礦物的邊界方形區域（用於碰撞檢查）。</p>
+
+  <h3><code>public void setCollected(boolean)</code> / <code>isCollected()</code></h3>
+  <p>標記礦物是否已被抓取。</p>
+
+  <h3><code>public void setDestroyed(boolean)</code> / <code>isDestroyed()</code></h3>
+  <p>標記礦物是否被炸彈破壞。</p>
+
+  <h3><code>public int getValue()</code></h3>
+  <p>取得礦物的分數。</p>
+
+  <h3><code>public int getWeight()</code></h3>
+  <p>取得礦物的重量（影響鉤爪返回速度）。</p>
+
+  <h2>📋 備註</h2>
+  <ul>
+    <li>需配合 <code>MineralType</code> 使用，以取得每種礦物的圖片資源。</li>
+    <li>會自動根據 <code>rotationSpeed</code> 增加旋轉角度。</li>
+    <li>可以被鉤爪抓取、繪製、炸彈銷毀。</li>
+  </ul>
+</body>
+</html>

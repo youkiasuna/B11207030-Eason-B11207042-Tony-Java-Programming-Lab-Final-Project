@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Class TimerManager</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 2em; background: #f9f9f9; }
+        h1 { color: #2c3e50; }
+        code { background: #eee; padding: 2px 4px; border-radius: 3px; }
+        pre { background: #eee; padding: 1em; border-radius: 5px; overflow-x: auto; }
+        .section { margin-bottom: 2em; }
+    </style>
+</head>
+<body>
+    <h1>Class TimerManager</h1>
+
+    <div class="section">
+        <h2>Package</h2>
+        <p><code>(default package)</code></p>
+    </div>
+
+    <div class="section">
+        <h2>Inheritance</h2>
+        <p><code>java.lang.Object</code> → <strong>TimerManager</strong></p>
+    </div>
+
+    <div class="section">
+        <h2>Description</h2>
+        <p>Manages a countdown timer based on system time. Can be used to track remaining time in a game or activity and determine if time is up.</p>
+    </div>
+
+    <div class="section">
+        <h2>Constructor Summary</h2>
+        <table border="1" cellpadding="5" cellspacing="0">
+            <tr style="background:#ddd;">
+                <th>Constructor</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>TimerManager(int seconds)</code></td>
+                <td>Creates a timer with a specified time limit in seconds and records the start time.</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Method Summary</h2>
+        <table border="1" cellpadding="5" cellspacing="0">
+            <tr style="background:#ddd;">
+                <th>Modifier and Type</th>
+                <th>Method</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>public void</code></td>
+                <td><code>update()</code></td>
+                <td>Placeholder method. No updates are required as remaining time is dynamically calculated.</td>
+            </tr>
+            <tr>
+                <td><code>public int</code></td>
+                <td><code>getTimeLeft()</code></td>
+                <td>Returns the number of seconds remaining until the timer reaches zero.</td>
+            </tr>
+            <tr>
+                <td><code>public boolean</code></td>
+                <td><code>isTimeUp()</code></td>
+                <td>Returns true if the timer has reached or passed the time limit.</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Field Summary</h2>
+        <ul>
+            <li><code>private long startTime</code> – The system time in milliseconds when the timer started.</li>
+            <li><code>private int limitSeconds</code> – The total time limit for the countdown in seconds.</li>
+        </ul>
+    </div>
+
+    <hr>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Class GamePanel</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 2em; background: #f9f9f9; }
+        h1 { color: #2c3e50; }
+        code { background: #eee; padding: 2px 4px; border-radius: 3px; }
+        pre { background: #eee; padding: 1em; border-radius: 5px; overflow-x: auto; }
+        .section { margin-bottom: 2em; }
+    </style>
+</head>
+<body>
+    <h1>Class GamePanel</h1>
+
+```
+<div class="section">
+    <h2>Package</h2>
+    <p><code>(default package)</code></p>
+</div>
+
+<div class="section">
+    <h2>Inheritance</h2>
+    <p><code>java.lang.Object</code> → <code>java.awt.Component</code> → <code>java.awt.Container</code> → <code>javax.swing.JComponent</code> → <code>javax.swing.JPanel</code> → <strong>GamePanel</strong></p>
+</div>
+
+<div class="section">
+    <h2>Description</h2>
+    <p>The main game panel responsible for rendering game graphics, handling game logic and user input for each level in the Gold Miner game.</p>
+</div>
+
+<div class="section">
+    <h2>Constructor Summary</h2>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr style="background:#ddd;">
+            <th>Constructor</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><code>GamePanel(GameManager manager, int level)</code></td>
+            <td>Initializes the panel, sets up game objects, starts the timer and loads background images for the specified level.</td>
+        </tr>
+    </table>
+</div>
+
+<div class="section">
+    <h2>Method Summary</h2>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr style="background:#ddd;">
+            <th>Modifier and Type</th>
+            <th>Method</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><code>public void</code></td>
+            <td><code>actionPerformed(ActionEvent e)</code></td>
+            <td>Invoked by the timer; updates game state, checks win/loss conditions, and triggers scene changes.</td>
+        </tr>
+        <tr>
+            <td><code>protected void</code></td>
+            <td><code>paintComponent(Graphics g)</code></td>
+            <td>Draws the game elements, including background, miner, hook, minerals, and game statistics.</td>
+        </tr>
+    </table>
+</div>
+
+<div class="section">
+    <h2>Fields and Game State</h2>
+    <ul>
+        <li><code>javax.swing.Timer timer</code> – Controls frame updates.</li>
+        <li><code>Hook hook</code> – Represents the hook mechanism for catching items.</li>
+        <li><code>ArrayList&lt;Mineral&gt; minerals</code> – List of collectible mineral objects.</li>
+        <li><code>ArrayList&lt;Mouse&gt; mice</code> – List of mice objects.</li>
+        <li><code>ScoreManager scoreManager</code> – Tracks and manages score state.</li>
+        <li><code>TimerManager timerManager</code> – Manages countdown timer.</li>
+        <li><code>Image backgroundGround</code>, <code>backgroundUnderground</code>, <code>minerImage</code> – Visual elements.</li>
+        <li><code>int level</code> – Current level number.</li>
+        <li><code>int bombsLeft</code> – Number of bombs available to the player.</li>
+        <li><code>boolean gameEnded</code> – Flag to indicate game has finished.</li>
+        <li><code>GameManager gameManager</code> – Manages game state transitions.</li>
+        <li><code>SoundPlayer bgmPlayer</code>, <code>sfxPlayer</code> – Background music and sound effect handlers.</li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>Key Bindings</h2>
+    <ul>
+        <li><code>SPACE</code> – Launches the hook to grab items.</li>
+        <li><code>C</code> – Uses a bomb if one is available and an item is caught.</li>
+    </ul>
+</div>
+
+<hr>
+```
+
+</body>
+</html>

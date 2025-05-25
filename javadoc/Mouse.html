@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Class Mouse</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 2em; background: #f9f9f9; }
+        h1 { color: #2c3e50; }
+        code { background: #eee; padding: 2px 4px; border-radius: 3px; }
+        pre { background: #eee; padding: 1em; border-radius: 5px; overflow-x: auto; }
+        .section { margin-bottom: 2em; }
+    </style>
+</head>
+<body>
+    <h1>Class Mouse</h1>
+
+    <div class="section">
+        <h2>Package</h2>
+        <p><code>(default package)</code></p>
+    </div>
+
+    <div class="section">
+        <h2>Inheritance</h2>
+        <p><code>java.lang.Object</code> → <strong>Mouse</strong></p>
+    </div>
+
+    <div class="section">
+        <h2>Description</h2>
+        <p>Represents a mouse character that moves along a defined path with pause behavior at segment ends. Includes scoring and drawing logic for gameplay interaction.</p>
+    </div>
+
+    <div class="section">
+        <h2>Constructor Summary</h2>
+        <table border="1" cellpadding="5" cellspacing="0">
+            <tr style="background:#ddd;">
+                <th>Constructor</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>Mouse(int size, Point point1, Point point2, Point point3, int value, int weight, String imageName, double moveSpeed)</code></td>
+                <td>Initializes a Mouse object with movement path, appearance, score value, weight, and speed.</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Method Summary</h2>
+        <table border="1" cellpadding="5" cellspacing="0">
+            <tr style="background:#ddd;">
+                <th>Modifier and Type</th>
+                <th>Method</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>public void</code></td>
+                <td><code>update()</code></td>
+                <td>Updates the position and state of the mouse on its path, including pause logic.</td>
+            </tr>
+            <tr>
+                <td><code>public void</code></td>
+                <td><code>draw(Graphics g)</code></td>
+                <td>Draws the mouse on the screen at its current position, flipped based on direction.</td>
+            </tr>
+            <tr>
+                <td><code>public void</code></td>
+                <td><code>drawAt(Graphics g, int x, int y)</code></td>
+                <td>Draws the mouse at a fixed location, without flipping the image.</td>
+            </tr>
+            <tr>
+                <td><code>public Rectangle</code></td>
+                <td><code>getBounds()</code></td>
+                <td>Returns the bounding box for the mouse, used for collision detection.</td>
+            </tr>
+            <tr>
+                <td><code>public boolean</code></td>
+                <td><code>isCollected()</code></td>
+                <td>Checks if the mouse has been collected by the player.</td>
+            </tr>
+            <tr>
+                <td><code>public void</code></td>
+                <td><code>setCollected(boolean collected)</code></td>
+                <td>Marks the mouse as collected or not.</td>
+            </tr>
+            <tr>
+                <td><code>public int</code></td>
+                <td><code>getValue()</code></td>
+                <td>Returns the score value of the mouse.</td>
+            </tr>
+            <tr>
+                <td><code>public int</code></td>
+                <td><code>getWeight()</code></td>
+                <td>Returns the weight of the mouse, affecting gameplay mechanics.</td>
+            </tr>
+            <tr>
+                <td><code>public boolean</code></td>
+                <td><code>isDestroyed()</code></td>
+                <td>Returns whether the mouse has been marked as destroyed.</td>
+            </tr>
+            <tr>
+                <td><code>public void</code></td>
+                <td><code>setDestroyed(boolean destroyed)</code></td>
+                <td>Marks the mouse as destroyed or not.</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Field Summary</h2>
+        <ul>
+            <li><code>protected double x, y</code> – Current position.</li>
+            <li><code>protected int size</code> – Size in pixels.</li>
+            <li><code>protected Point point1, point2, point3</code> – Movement path points.</li>
+            <li><code>protected int value</code> – Score value.</li>
+            <li><code>protected int weight</code> – Weight for gameplay impact.</li>
+            <li><code>protected boolean isCollected</code> – Collection state.</li>
+            <li><code>protected Image image</code> – Visual representation.</li>
+            <li><code>protected int currentSegment</code> – Current path segment (0–3).</li>
+            <li><code>protected double progress</code> – Progress within the current segment.</li>
+            <li><code>protected final double moveSpeed</code> – Speed of movement.</li>
+            <li><code>protected boolean isPausing</code> – Whether currently pausing.</li>
+            <li><code>protected int pauseTimer</code> – Pause counter.</li>
+            <li><code>protected static final int PAUSE_DURATION</code> – Frames to pause.</li>
+            <li><code>protected boolean isDestroyed</code> – Whether the mouse has been destroyed.</li>
+        </ul>
+    </div>
+
+    <hr>
+</body>
+</html>
