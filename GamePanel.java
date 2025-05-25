@@ -13,13 +13,15 @@ public class GamePanel extends JPanel implements ActionListener {
     private Image backgroundGround;
     private Image backgroundUnderground;
     private Image minerImage;
-    private GameManager manager;
     private int level;
     private int bombsLeft;
+    private boolean gameEnded = false;
+    private GameManager gameManager;
+    private SoundPlayer bgmPlayer = new SoundPlayer();
+    private SoundPlayer sfxPlayer = new SoundPlayer();
+
 
     public GamePanel(GameManager manager, int level) {
-        this.manager = manager;
-        this.level = level;
         setFocusable(true);
         addKeyListener(new GameKeyAdapter());
         addFocusListener(new FocusAdapter() {
@@ -32,13 +34,18 @@ public class GamePanel extends JPanel implements ActionListener {
         setLayout(null);
         requestFocusInWindow();
 
+        this.gameManager = manager;
+        this.level = level;
         LevelConfig config = LevelLoader.loadLevel(level);
         this.minerals = config.minerals;
         this.mice = config.mice;
         this.scoreManager = new ScoreManager(config.targetScore);
         this.timerManager = new TimerManager(config.timeLimit);
-        this.hook = new Hook(scoreManager);
-        this.bombsLeft = config.bombCount;
+        this.hook = new Hook(scoreManager, sfxPlayer);
+        this.bombsLeft = config.bombCount;  // 直接初始化 bombCount
+        bgmPlayer.playSound("sounds/bgm.wav", true);
+        //bgmPlayer.setValue(-10.0f);
+
 
         backgroundGround = ImageLoader.loadImage("background_ground.jpg");
         backgroundUnderground = ImageLoader.loadImage("background_underground.jpg");
@@ -50,34 +57,98 @@ public class GamePanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        timerManager.update();
+        if (gameEnded) return;
+        
         hook.update(minerals, mice);
-        if (hook.isReturning() && hook.getCaughtItem() != null) {
-            // 不再需要 updateRotation（老鼠無旋轉）
-        }
-        for (Mineral m : minerals) {
-            if (!m.isCollected()) {
-                m.updateRotation();
+        
+        for (Mouse mouse : mice) {
+            if (!mouse.isCollected() && !mouse.isDestroyed()) {
+                mouse.update();
             }
         }
-        for (Mouse m : mice) {
-            if (!m.isCollected()) {
-                m.update();
+        
+        for (Mineral mineral : minerals) {
+            if (!mineral.isCollected() && !mineral.isDestroyed()) {
+                mineral.update();
             }
+        }
+        
+        boolean allCollected = minerals.stream().allMatch(m -> m.isCollected() || m.isDestroyed()) &&
+                            mice.stream().allMatch(m -> m.isCollected() || m.isDestroyed());
+        if (allCollected && !hook.isReturning() && hook.getCaughtItem() == null) {
+            gameEnded = true;
+            bgmPlayer.stop();
+            repaint();
+            if (scoreManager.hasMetGoal()) {
+                if (level >= LevelLoader.MAX_LEVEL) {
+                    JOptionPane.showMessageDialog(
+                        this,
+                        "🎉 恭喜你完成所有關卡！",
+                        "通關成功",
+                        JOptionPane.INFORMATION_MESSAGE
+                    );
+                    gameManager.returnToMenu();
+                } else {
+                    int option = JOptionPane.showOptionDialog(
+                        this,
+                        "你成功達到目標分數！要繼續挑戰下一關嗎？",
+                        "通關成功",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.INFORMATION_MESSAGE,
+                        null,
+                        new String[]{"下一關", "返回主選單"},
+                        "下一關"
+                    );
+                    if (option == JOptionPane.YES_OPTION) {
+                        gameManager.startNextLevel(level);
+                    } else {
+                        gameManager.returnToMenu();
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(
+                    this,
+                    "你已挖完場上的資源，但未達到目標分數，請再接再厲！",
+                    "挑戰失敗",
+                    JOptionPane.WARNING_MESSAGE
+                );
+                gameManager.returnToMenu();
+            }
+        }
+         /*else if (allCollected) {
+            // 添加日誌，追蹤為何不結束
+            System.out.println("All items collected/destroyed, but game not ended. isReturning: " + hook.isReturning() + ", caughtItem: " + (hook.getCaughtItem() != null));
+        }*/
+        
+        if (timerManager.isTimeUp() && !gameEnded) {
+            gameEnded = true;
+            bgmPlayer.stop();
+            repaint();
+            
+            JOptionPane.showMessageDialog(this, "時間到！未達到目標分數，請再接再厲！");
+            gameManager.returnToMenu();
         }
 
-        boolean allCollected = minerals.stream().allMatch(Mineral::isCollected) &&
-                              mice.stream().allMatch(Mouse::isCollected);
-        if (allCollected && !hook.isReturning() && scoreManager.hasMetGoal()) {
-            timer.stop();
-            JOptionPane.showMessageDialog(this, "You win!");
-            System.out.println("All items collected, hook returned, score met, game ended. Score: " + scoreManager.getScore() + ", Target: " + scoreManager.getTargetScore());
-            manager.returnToMenu();
-        } else if (timerManager.isTimeUp()) {
-            timer.stop();
-            JOptionPane.showMessageDialog(this, scoreManager.hasMetGoal() ? "You win!" : "You lose!");
-            System.out.println("Time up, game ended. Score: " + scoreManager.getScore() + ", Target: " + scoreManager.getTargetScore());
-            manager.returnToMenu();
+        if (scoreManager.hasMetGoal() && !gameEnded) {
+            gameEnded = true;
+            bgmPlayer.stop();
+            repaint();
+
+            int option = JOptionPane.showOptionDialog(
+                this,
+                "你成功達到目標分數！要繼續挑戰下一關嗎？",
+                "通關成功",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.INFORMATION_MESSAGE,
+                null,
+                new String[]{"下一關", "返回主選單"},
+                "下一關"
+            );
+            if (option == JOptionPane.YES_OPTION) {
+                gameManager.startNextLevel(level);
+            } else {
+                gameManager.returnToMenu();
+            }
         }
         repaint();
     }
@@ -105,22 +176,29 @@ public class GamePanel extends JPanel implements ActionListener {
         g.drawString("Score: " + scoreManager.getScore(), 20, 30);
         g.drawString("Time: " + timerManager.getTimeLeft(), 150, 30);
         g.drawString("Bombs: " + bombsLeft, 280, 30);
+        g.setColor(Color.BLUE);
+        g.drawString("Level: " + level, 650, 30);
+        g.drawString("Target: " + scoreManager.getTargetScore(), 650, 60);
     }
 
     private class GameKeyAdapter extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
-            System.out.println("Key pressed: " + e.getKeyCode() + " (" + KeyEvent.getKeyText(e.getKeyCode()) + ")");
-            if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-                hook.launch();
-            }
-            if (e.getKeyCode() == KeyEvent.VK_C && bombsLeft > 0) {
-                if (hook.useBomb()) {
-                    bombsLeft--;
-                    System.out.println("Bomb used, bombs left: " + bombsLeft);
+            if (e.getKeyCode() == KeyEvent.VK_SPACE && !gameEnded) {
+            hook.launch();
+            } else if (e.getKeyCode() == KeyEvent.VK_C && !gameEnded) {
+                if (bombsLeft> 0 && hook.getCaughtItem() != null) {
+                    if (hook.useBomb()) {
+                        sfxPlayer.playSound("sounds/explosion.wav", false);
+                        bombsLeft--;
+                        System.out.println("Bomb count reduced to: " + bombsLeft);
+                    } else {
+                        System.out.println("Failed to use bomb");
+                    }
+                } else {
+                    System.out.println("No bombs left or no item to bomb");
                 }
             }
-            requestFocusInWindow();
         }
     }
 }

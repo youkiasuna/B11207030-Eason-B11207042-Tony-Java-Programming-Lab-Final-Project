@@ -14,4 +14,7 @@ public class LevelConfig {
         this.timeLimit = timeLimit;
         this.bombCount = bombCount;
     }
+    public int getTimeLimit() {
+        return timeLimit;
+    }
 }

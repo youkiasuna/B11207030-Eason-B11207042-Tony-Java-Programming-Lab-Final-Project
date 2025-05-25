@@ -16,11 +16,13 @@ public class Hook {
     private ScoreManager scoreManager;
     private static final int WINDOW_WIDTH = 800;
     private static final int WINDOW_HEIGHT = 600;
+    private SoundPlayer sfxPlayer;
 
-    public Hook(ScoreManager scoreManager) {
+    public Hook(ScoreManager scoreManager, SoundPlayer sfxPlayer) {
         this.scoreManager = scoreManager;
         this.x = 400;
         this.y = 120;
+        this.sfxPlayer = sfxPlayer;
         if (hookImage == null || hookImage.getWidth(null) <= 0) {
             System.err.println("Failed to load hook.png");
         }
@@ -44,7 +46,10 @@ public class Hook {
         } else if (isReturning) {
             int speed = (caughtItem != null) ? Math.max(5, 20 - getItemWeight()) : 20;
             length -= speed;
-            if (length <= minLength) reset();
+            if (length <= minLength) {
+                reset();
+                System.out.println("Hook reset after return");
+            }
         }
     }
 
@@ -75,7 +80,7 @@ public class Hook {
         int hookY = (int) (y + length * Math.sin(angle));
         Rectangle hookRect = new Rectangle(hookX - 5, hookY - 5, 10, 10);
         for (Mineral m : minerals) {
-            if (!m.isCollected() && hookRect.intersects(m.getBounds())) {
+            if (!m.isCollected() && !m.isDestroyed() && hookRect.intersects(m.getBounds())) {
                 caughtItem = m;
                 m.setCollected(true);
                 startReturn();
@@ -85,7 +90,7 @@ public class Hook {
         }
         if (caughtItem == null) {
             for (Mouse m : mice) {
-                if (!m.isCollected() && hookRect.intersects(m.getBounds())) {
+                if (!m.isCollected() && !m.isDestroyed() && hookRect.intersects(m.getBounds())) {
                     caughtItem = m;
                     m.setCollected(true);
                     startReturn();
@@ -99,15 +104,20 @@ public class Hook {
     public boolean useBomb() {
         if (caughtItem != null) {
             if (caughtItem instanceof Mineral) {
-                ((Mineral)caughtItem).setCollected(false);
+                ((Mineral)caughtItem).setDestroyed(true);
+                System.out.println("Bombed mineral: " + ((Mineral)caughtItem).getValue());
             } else if (caughtItem instanceof Mouse) {
-                ((Mouse)caughtItem).setCollected(false);
+                ((Mouse)caughtItem).setDestroyed(true);
+                System.out.println("Bombed mouse: " + ((Mouse)caughtItem).getValue());
             }
             caughtItem = null;
+            isExtending = false; // 確保停止延伸
+            isReturning = true; // 明確開始返回
             startReturn();
             System.out.println("Bomb used successfully");
             return true;
         }
+        System.out.println("No item to bomb");
         return false;
     }
 
@@ -144,6 +154,7 @@ public class Hook {
     private void reset() {
         isReturning = false;
         if (caughtItem != null) {
+            sfxPlayer.playSound("sounds/score.wav", false);
             scoreManager.addScore(getItemValue());
             System.out.println("Score added: " + getItemValue());
             caughtItem = null;
@@ -153,6 +164,7 @@ public class Hook {
 
     private int getItemValue() {
         if (caughtItem instanceof Mineral) {
+            
             return ((Mineral)caughtItem).getValue();
         } else if (caughtItem instanceof Mouse) {
             return ((Mouse)caughtItem).getValue();
