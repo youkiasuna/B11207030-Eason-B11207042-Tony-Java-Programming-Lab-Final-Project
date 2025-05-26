@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Class SoundPlayer</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 2em; background: #f9f9f9; }
+        h1 { color: #2c3e50; }
+        code { background: #eee; padding: 2px 4px; border-radius: 3px; }
+        pre { background: #eee; padding: 1em; border-radius: 5px; overflow-x: auto; }
+        .section { margin-bottom: 2em; }
+    </style>
+</head>
+<body>
+    <h1>Class SoundPlayer</h1>
+
+    <div class="section">
+        <h2>Package</h2>
+        <p><code>(default package)</code></p>
+    </div>
+
+    <div class="section">
+        <h2>Inheritance</h2>
+        <p><code>java.lang.Object</code> → <strong>SoundPlayer</strong></p>
+    </div>
+
+    <div class="section">
+        <h2>Description</h2>
+        <p>Handles the playback of sound effects or background music using the Java Sound API. Supports playing audio clips once or looping continuously.</p>
+    </div>
+
+    <div class="section">
+        <h2>Constructor Summary</h2>
+        <table border="1" cellpadding="5" cellspacing="0">
+            <tr style="background:#ddd;">
+                <th>Constructor</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>SoundPlayer()</code></td>
+                <td>Creates a new instance of <code>SoundPlayer</code> without any loaded sound clip.</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Method Summary</h2>
+        <table border="1" cellpadding="5" cellspacing="0">
+            <tr style="background:#ddd;">
+                <th>Modifier and Type</th>
+                <th>Method</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>public void</code></td>
+                <td><code>playSound(String soundFile, boolean loop)</code></td>
+                <td>Plays the specified audio file. Optionally loops the clip continuously if <code>loop</code> is true. Reduces volume by 15dB.</td>
+            </tr>
+            <tr>
+                <td><code>public void</code></td>
+                <td><code>stop()</code></td>
+                <td>Stops playback if a clip is currently running.</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Field Summary</h2>
+        <ul>
+            <li><code>private Clip clip</code> – The current audio clip being played.</li>
+        </ul>
+    </div>
+
+    <hr>
+</body>
+</html>

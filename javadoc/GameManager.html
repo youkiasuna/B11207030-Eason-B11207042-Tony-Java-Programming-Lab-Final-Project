@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Class GameManager</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 2em; background: #f9f9f9; }
+        h1 { color: #2c3e50; }
+        code { background: #eee; padding: 2px 4px; border-radius: 3px; }
+        pre { background: #eee; padding: 1em; border-radius: 5px; overflow-x: auto; }
+        .section { margin-bottom: 2em; }
+    </style>
+</head>
+<body>
+    <h1>Class GameManager</h1>
+
+    <div class="section">
+        <h2>Package</h2>
+        <p><code>(default package)</code></p>
+    </div>
+
+    <div class="section">
+        <h2>Inheritance</h2>
+        <p><code>java.lang.Object</code> → <strong>GameManager</strong></p>
+    </div>
+
+    <div class="section">
+        <h2>Description</h2>
+        <p>Manages the game state and transitions between the main menu and game panels. Handles level progression and completion feedback for the Gold Miner game.</p>
+    </div>
+
+    <div class="section">
+        <h2>Constructor Summary</h2>
+        <table border="1" cellpadding="5" cellspacing="0">
+            <tr style="background:#ddd;">
+                <th>Constructor</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>GameManager(MainFrame frame)</code></td>
+                <td>Initializes the game manager with the main application frame and creates the menu panel.</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Method Summary</h2>
+        <table border="1" cellpadding="5" cellspacing="0">
+            <tr style="background:#ddd;">
+                <th>Modifier and Type</th>
+                <th>Method</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>public void</code></td>
+                <td><code>startGame(int level)</code></td>
+                <td>Starts the game at the specified level and switches the content pane to the game panel.</td>
+            </tr>
+            <tr>
+                <td><code>public void</code></td>
+                <td><code>startNextLevel(int currentLevel)</code></td>
+                <td>Proceeds to the next level, or shows a completion message if all levels are cleared.</td>
+            </tr>
+            <tr>
+                <td><code>public void</code></td>
+                <td><code>returnToMenu()</code></td>
+                <td>Returns the view to the main menu panel.</td>
+            </tr>
+            <tr>
+                <td><code>public MenuPanel</code></td>
+                <td><code>getMenuPanel()</code></td>
+                <td>Returns the menu panel instance.</td>
+            </tr>
+            <tr>
+                <td><code>public GamePanel</code></td>
+                <td><code>getGamePanel()</code></td>
+                <td>Returns the game panel instance.</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Field Summary</h2>
+        <ul>
+            <li><code>private MainFrame frame</code> – Reference to the main application window.</li>
+            <li><code>private MenuPanel menuPanel</code> – The main menu panel instance.</li>
+            <li><code>private GamePanel gamePanel</code> – The current game panel instance.</li>
+        </ul>
+    </div>
+
+    <hr>
+</body>
+</html>

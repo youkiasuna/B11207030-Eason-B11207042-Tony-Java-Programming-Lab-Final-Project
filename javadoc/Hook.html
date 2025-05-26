@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>Hook 類別說明</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2em; line-height: 1.6; }
+        h1, h2, h3 { color: #2c3e50; }
+        code { background: #ecf0f1; padding: 2px 4px; border-radius: 4px; }
+        .section { margin-top: 2em; }
+    </style>
+</head>
+<body>
+<h1>Hook 類別說明</h1>
+<p><strong>用途：</strong>代表黃金礦工遊戲中控制鉤爪（hook）的邏輯與動畫，包括擺盪、伸縮、碰撞、得分與炸彈功能。</p>
+
+<div class="section">
+    <h2>主要成員變數</h2>
+    <ul>
+        <li><code>x, y</code>：鉤爪的原點座標（礦工位置）</li>
+        <li><code>angle</code>：鉤爪當前擺動角度</li>
+        <li><code>length</code>：鉤爪當前長度</li>
+        <li><code>isExtending</code>：是否正在向前伸出</li>
+        <li><code>isReturning</code>：是否正在收回</li>
+        <li><code>caughtItem</code>：目前抓到的物件（可為 Mineral 或 Mouse）</li>
+        <li><code>hookImage</code>：鉤爪圖像資源</li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>主要方法</h2>
+    <ul>
+        <li><code>update(List minerals, List mice)</code>：更新鉤爪狀態與位置</li>
+        <li><code>launch()</code>：啟動鉤爪伸出</li>
+        <li><code>startReturn()</code>：啟動鉤爪收回</li>
+        <li><code>checkCollision()</code>：檢查是否碰到礦物或老鼠</li>
+        <li><code>useBomb()</code>：使用炸彈摧毀當前抓住的物品</li>
+        <li><code>draw(Graphics g)</code>：畫出鉤爪與抓到的物品</li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>邏輯摘要</h2>
+    <p>鉤爪預設以 <code>sin</code> 擺動，按下空白鍵後伸長，若碰到物品則抓住並返回。若鉤爪碰到畫面邊界也會自動收回。</p>
+    <p>抓到物品後回到原點會加分；也可以在抓到後按下 <code>C</code> 鍵丟炸彈摧毀該物品。</p>
+</div>
+
+<div class="section">
+    <h2>使用資源</h2>
+    <ul>
+        <li>鉤爪圖片：<code>hook.png</code></li>
+        <li>得分音效：<code>sounds/score.wav</code></li>
+        <li>爆炸音效：<code>sounds/explosion.wav</code></li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>音效處理</h2>
+    <p>藉由 <code>SoundPlayer</code> 類別播放效果音，抓到物品與丟炸彈皆會觸發音效。</p>
+</div>
+
+<div class="section">
+    <h2>備註</h2>
+    <ul>
+        <li>鉤爪返回速度根據抓到物品的 <code>getWeight()</code> 決定</li>
+        <li>支援老鼠與礦物，兩者皆實作 <code>getValue()</code>, <code>getWeight()</code>, <code>getBounds()</code></li>
+    </ul>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>MineralType 枚舉說明</title>
+  <style>
+    body { font-family: sans-serif; padding: 2em; background: #fdfdfd; color: #333; }
+    code { background: #eee; padding: 0.2em 0.4em; border-radius: 4px; }
+    pre { background: #f4f4f4; padding: 1em; border-radius: 4px; overflow-x: auto; }
+    h1, h2, h3 { color: #444; }
+  </style>
+</head>
+<body>
+  <h1>🪨 MineralType 枚舉類別</h1>
+  <p><code>MineralType</code> 定義了遊戲中支援的礦物種類，並與各自的圖像檔案建立關聯。</p>
+
+  <h2>📦 Enum 成員</h2>
+  <ul>
+    <li><code>GOLD</code>：金塊，使用圖檔 <code>gold.png</code></li>
+    <li><code>ROCK</code>：石頭，使用圖檔 <code>rock.png</code></li>
+  </ul>
+
+  <h2>🧰 欄位與方法</h2>
+
+  <h3><code>private final String imageName;</code></h3>
+  <p>對應圖片的檔案名稱，儲存在 <code>/images</code> 資料夾下。</p>
+
+  <h3><code>MineralType(String imageName)</code></h3>
+  <p>建構子，設定該礦物類型對應的圖片檔名。</p>
+
+  <h3><code>public Image getImage()</code></h3>
+  <p>呼叫 <code>ImageLoader.loadImage()</code> 載入並回傳對應圖像物件。</p>
+
+  <h3><code>public String getImageName()</code></h3>
+  <p>回傳礦物圖像的檔名。</p>
+
+  <h2>📋 用法範例</h2>
+  <pre><code>
+MineralType type = MineralType.GOLD;
+Image img = type.getImage();
+  </code></pre>
+
+  <h2>📎 備註</h2>
+  <ul>
+    <li>此 enum 通常由 <code>Mineral</code> 類別中的 <code>type</code> 欄位使用。</li>
+    <li>擴充新礦物類型時，只需新增 enum 值與對應圖檔即可。</li>
+  </ul>
+</body>
+</html>

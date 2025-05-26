@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Class ScoreManager</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 2em; background: #f9f9f9; }
+        h1 { color: #2c3e50; }
+        code { background: #eee; padding: 2px 4px; border-radius: 3px; }
+        pre { background: #eee; padding: 1em; border-radius: 5px; overflow-x: auto; }
+        .section { margin-bottom: 2em; }
+    </style>
+</head>
+<body>
+    <h1>Class ScoreManager</h1>
+
+    <div class="section">
+        <h2>Package</h2>
+        <p><code>(default package)</code></p>
+    </div>
+
+    <div class="section">
+        <h2>Inheritance</h2>
+        <p><code>java.lang.Object</code> → <strong>ScoreManager</strong></p>
+    </div>
+
+    <div class="section">
+        <h2>Description</h2>
+        <p>Manages the score tracking system for the game, including adding points, checking if the score goal has been met, and retrieving target score values.</p>
+    </div>
+
+    <div class="section">
+        <h2>Constructor Summary</h2>
+        <table border="1" cellpadding="5" cellspacing="0">
+            <tr style="background:#ddd;">
+                <th>Constructor</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>ScoreManager(int targetScore)</code></td>
+                <td>Initializes the score manager with a target score and sets the current score to zero.</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Method Summary</h2>
+        <table border="1" cellpadding="5" cellspacing="0">
+            <tr style="background:#ddd;">
+                <th>Modifier and Type</th>
+                <th>Method</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>public int</code></td>
+                <td><code>getScore()</code></td>
+                <td>Returns the current score.</td>
+            </tr>
+            <tr>
+                <td><code>public void</code></td>
+                <td><code>addScore(int value)</code></td>
+                <td>Adds a specified value to the current score.</td>
+            </tr>
+            <tr>
+                <td><code>public boolean</code></td>
+                <td><code>hasMetGoal()</code></td>
+                <td>Returns true if the current score is greater than or equal to the target score.</td>
+            </tr>
+            <tr>
+                <td><code>public int</code></td>
+                <td><code>getTargetScore()</code></td>
+                <td>Returns the target score to be reached in the game.</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Field Summary</h2>
+        <ul>
+            <li><code>private int score</code> – The current accumulated score.</li>
+            <li><code>private int targetScore</code> – The goal score to be achieved.</li>
+        </ul>
+    </div>
+
+    <hr>
+</body>
+</html>
